@@ -1,8 +1,5 @@
 package com.ncedu.rmi.client;
-
-import com.ncedu.rmi.server.ChatServer;
 import com.ncedu.rmi.server.ChatServerIF;
-
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;

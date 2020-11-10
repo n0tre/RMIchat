@@ -1,8 +1,5 @@
 package com.ncedu.rmi.client;
-
-import com.ncedu.rmi.server.ChatServer;
 import com.ncedu.rmi.server.ChatServerIF;
-
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
@@ -17,23 +14,40 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
         this.chatServer = chatServer;
         chatServer.registerChatClient(this);
     }
-
     public void retrieveMessage(String message) throws RemoteException {
         System.out.println(message);
-
     }
-
     public void run() {
         Scanner scanner = new Scanner(System.in);
         String message;
-        while (true)
-        {
+        while (true) {
+            System.out.println(name + ", Вы хотите отправить личное сообщение?");
             message = scanner.nextLine();
-            try {
-                chatServer.broadcastMessage(name + " : " + message);
-            } catch (RemoteException e) {
-                e.printStackTrace();
+            if (message.equals("нет")) {
+                System.out.println("Хорошо, " + name + ", введите сообщение, которое будет видно всем");
+                message = scanner.nextLine();
+                try {
+                    chatServer.broadcastMessage(name + " : " + message);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
+            else
+            {
+                System.out.println("Хорошо, " + name +  ", введите номер чата, в который вы хотите отправить сообщение");
+                String destination = scanner.nextLine();
+                int chatNumber = Integer.parseInt(destination);
+                System.out.println(name + ", теперь введите сообщение для адресата");
+                message = scanner.nextLine();
+                try {
+                    chatServer.privateMessage(name + " : " + message, chatNumber);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+
         }
     }
+
+
 }
