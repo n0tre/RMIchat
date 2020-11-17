@@ -1,5 +1,4 @@
-package com.ncedu.rmi.client;
-import com.ncedu.rmi.server.ChatServerIF;
+package com.ncedu.rmi;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -10,6 +9,7 @@ public class ChatClientDriver {
         String chatServerURL = "rmi://localhost/RMIChatServer";
         ChatServerIF chatServer = (ChatServerIF) Naming.lookup(chatServerURL);
         new Thread(new ChatClient(args[0], chatServer)).start();
+
 
     }
 }

@@ -1,5 +1,5 @@
-package com.ncedu.rmi.client;
-import com.ncedu.rmi.server.ChatServerIF;
+package com.ncedu.rmi;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
@@ -17,6 +17,8 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
     public void retrieveMessage(String message) throws RemoteException {
         System.out.println(message);
     }
+
+    @Override
     public void run() {
         Scanner scanner = new Scanner(System.in);
         String message;

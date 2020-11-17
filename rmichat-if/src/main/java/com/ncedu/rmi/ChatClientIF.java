@@ -1,4 +1,4 @@
-package com.ncedu.rmi.client;
+package com.ncedu.rmi;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 

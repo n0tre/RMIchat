@@ -1,5 +1,4 @@
-package com.ncedu.rmi.server;
-import com.ncedu.rmi.client.ChatClientIF;
+package com.ncedu.rmi;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 

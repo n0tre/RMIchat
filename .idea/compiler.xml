@@ -6,7 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="RMIchat" />
+        <module name="rmichat-client" />
+        <module name="rmichat-server" />
+        <module name="rmichat-if" />
       </profile>
     </annotationProcessing>
   </component>
