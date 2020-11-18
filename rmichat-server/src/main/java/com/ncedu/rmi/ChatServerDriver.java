@@ -7,5 +7,7 @@ import java.rmi.RemoteException;
 public class ChatServerDriver {
     public static void main(String[] args) throws RemoteException, MalformedURLException {
         Naming.rebind("RMIChatServer", new ChatServer());
+        
+
     }
 }

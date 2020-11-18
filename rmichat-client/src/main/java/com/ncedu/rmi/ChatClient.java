@@ -18,6 +18,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
         System.out.println(message);
     }
 
+
     @Override
     public void run() {
         Scanner scanner = new Scanner(System.in);
