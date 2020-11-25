@@ -1,7 +1,8 @@
 package com.ncedu.rmi;
-
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Runnable {
@@ -14,43 +15,79 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
         this.chatServer = chatServer;
         chatServer.registerChatClient(this);
     }
+
     public void retrieveMessage(String message) throws RemoteException {
         System.out.println(message);
     }
 
+    public String getName(ChatClientIF chatClient) {
+        return name;
+    }
 
     @Override
-    public void run() {
+    public String getName() throws RemoteException {
+        return name;
+    }
+
+
+    @Override
+    public void run()
+    {
         Scanner scanner = new Scanner(System.in);
+        String choose;
         String message;
-        while (true) {
-            System.out.println(name + ", Вы хотите отправить личное сообщение?");
-            message = scanner.nextLine();
-            if (message.equals("нет")) {
-                System.out.println("Хорошо, " + name + ", введите сообщение, которое будет видно всем");
-                message = scanner.nextLine();
-                try {
-                    chatServer.broadcastMessage(name + " : " + message);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-            }
-            else
-            {
-                System.out.println("Хорошо, " + name +  ", введите номер чата, в который вы хотите отправить сообщение");
-                String destination = scanner.nextLine();
-                int chatNumber = Integer.parseInt(destination);
-                System.out.println(name + ", теперь введите сообщение для адресата");
-                message = scanner.nextLine();
-                try {
-                    chatServer.privateMessage(name + " : " + message, chatNumber);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
+        {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
+                System.out.println(name + " Выберите действие " + Arrays.asList(Actions.values()));
+            while (true) {
+            choose = scanner.nextLine();
+            if (choose.equals("1")) {
+                    System.out.println("Хорошо, " + name + ", введите номер чата, в который вы хотите отправить сообщение");
+                    String destination = scanner.nextLine();
+                    int chatNumber = Integer.parseInt(destination);
+                    System.out.println(name + ", теперь введите сообщение для адресата");
+                    message = scanner.nextLine();
+                    try {
+                        chatServer.privateMessage(name + " : " + message, chatNumber);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (choose.equals("2")) {
+                    System.out.println("Хорошо, " + name + ", введите сообщение, которое будет видно всем");
+                    message = scanner.nextLine();
+                    try {
+                        chatServer.broadcastMessage(name + " : " + message);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (choose.equals("3")) {
+                    try {
+                        System.out.println("List of active users: " + chatServer.listOfActiveUsers(this));
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                    ;
+                }
+                if (choose.equals("4")) {
+                    try {
+                        chatServer.disconnectChatClient(this);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+                }
+
+            }
         }
     }
 
 
-}
+
+
