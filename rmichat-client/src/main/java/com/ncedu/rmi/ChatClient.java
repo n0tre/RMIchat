@@ -1,10 +1,8 @@
 package com.ncedu.rmi;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
-
 public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Runnable {
     private static final long serialVersionUID = 1L;
     private ChatServerIF chatServer;
@@ -15,21 +13,16 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
         this.chatServer = chatServer;
         chatServer.registerChatClient(this);
     }
-
     public void retrieveMessage(String message) throws RemoteException {
         System.out.println(message);
     }
-
     public String getName(ChatClientIF chatClient) {
         return name;
     }
-
     @Override
     public String getName() throws RemoteException {
         return name;
     }
-
-
     @Override
     public void run()
     {
@@ -83,7 +76,6 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
                     }
                 }
                 }
-
             }
         }
     }
