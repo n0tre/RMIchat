@@ -2,33 +2,35 @@ package com.ncedu.rmi;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class ChatServer extends UnicastRemoteObject implements ChatServerIF {
     private static final long serialVersionUID = 1L;
     private ArrayList<ChatClientIF> chatClients;
+
     protected ChatServer() throws RemoteException {
         chatClients = new ArrayList<>();
     }
 
     public ArrayList listOfActiveUsers(ChatClientIF listOfUsers) throws RemoteException {
         ArrayList list = new ArrayList();
-        for (int i = 0; i < chatClients.size(); i++)
-        {
+        for (int i = 0; i < chatClients.size(); i++) {
             list.add(chatClients.get(i).getName(listOfUsers));
         }
         return list;
     }
 
 
-
-    public boolean isUnique (String name, ChatServerIF list) throws RemoteException {
+    public boolean isUnique(String name, ChatServerIF list) throws RemoteException {
         boolean unique = true;
         for (int i = 0; i < chatClients.size(); i++) {
             if (chatClients.get(i).getName().equals(name))
                 unique = false;
-            else unique = true; }
-            return unique;
-   }
+        }
 
+        return unique;
+    }
 
 
     public synchronized void registerChatClient(ChatClientIF chatClient) throws RemoteException {
@@ -37,12 +39,28 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerIF {
     }
 
 
-
     public synchronized void disconnectChatClient(ChatClientIF chatClient) throws RemoteException {
         this.chatClients.remove(chatClient);
         broadcastMessage("Client " + chatClient.getName(chatClient) + " is disconnected");
     }
+
     public void broadcastMessage(final String message) throws RemoteException {
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        for (final ChatClientIF client : this.chatClients) {
+            executorService.execute(() -> {
+                try {
+                    client.retrieveMessage(message);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+        executorService.shutdown();
+    }
+
+
+    /* public void broadcastMessage(final String message) throws RemoteException {
             for (final ChatClientIF client: this.chatClients) {
                 Thread clientThread = new Thread() {
                     @Override
@@ -56,8 +74,10 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerIF {
                 };
                 clientThread.start();
             }
+    } */
+
+        public void privateMessage (String message,int i) throws RemoteException {
+            chatClients.get(i).retrieveMessage(message);
+        }
     }
-    public void privateMessage(String message, int i) throws RemoteException {
-        chatClients.get(i).retrieveMessage(message);
-    }
-}
+
