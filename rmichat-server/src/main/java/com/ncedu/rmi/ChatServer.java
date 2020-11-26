@@ -2,15 +2,16 @@ package com.ncedu.rmi;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ChatServer extends UnicastRemoteObject implements ChatServerIF {
     private static final long serialVersionUID = 1L;
-    private ArrayList<ChatClientIF> chatClients;
+    private CopyOnWriteArrayList<ChatClientIF> chatClients;
 
     protected ChatServer() throws RemoteException {
-        chatClients = new ArrayList<>();
+        chatClients = new CopyOnWriteArrayList<>();
     }
 
     public ArrayList listOfActiveUsers(ChatClientIF listOfUsers) throws RemoteException {
@@ -25,7 +26,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerIF {
     public boolean isUnique(String name, ChatServerIF list) throws RemoteException {
         boolean unique = true;
         for (int i = 0; i < chatClients.size(); i++) {
-            if (chatClients.get(i).getName().equals(name))
+            if (chatClients.get(i).getName().toUpperCase().equals(name.toUpperCase()))
                 unique = false;
         }
 
@@ -33,13 +34,13 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerIF {
     }
 
 
-    public synchronized void registerChatClient(ChatClientIF chatClient) throws RemoteException {
+    public void registerChatClient(ChatClientIF chatClient) throws RemoteException {
         this.chatClients.add(chatClient);
         broadcastMessage("Client " + chatClient.getName(chatClient) + " is connected");
     }
 
 
-    public synchronized void disconnectChatClient(ChatClientIF chatClient) throws RemoteException {
+    public void disconnectChatClient(ChatClientIF chatClient) throws RemoteException {
         this.chatClients.remove(chatClient);
         broadcastMessage("Client " + chatClient.getName(chatClient) + " is disconnected");
     }
