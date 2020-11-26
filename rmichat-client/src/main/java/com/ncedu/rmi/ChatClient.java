@@ -36,14 +36,14 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
                 e.printStackTrace();
             }
 
-                System.out.println(name + " Выберите действие " + Arrays.asList(Actions.values()));
+                System.out.println(name + " choose what you want " + Arrays.asList(Actions.values()));
             while (true) {
             choose = scanner.nextLine();
             if (choose.equals("1")) {
-                    System.out.println("Хорошо, " + name + ", введите номер чата, в который вы хотите отправить сообщение");
+                    System.out.println("Ok, " + name + ", enter the chat number");
                     String destination = scanner.nextLine();
                     int chatNumber = Integer.parseInt(destination);
-                    System.out.println(name + ", теперь введите сообщение для адресата");
+                    System.out.println(name + ", enter your private message");
                     message = scanner.nextLine();
                     try {
                         chatServer.privateMessage(name + " : " + message, chatNumber);
@@ -52,7 +52,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
                     }
                 }
                 if (choose.equals("2")) {
-                    System.out.println("Хорошо, " + name + ", введите сообщение, которое будет видно всем");
+                    System.out.println("Ok, " + name + ", enter your public message");
                     message = scanner.nextLine();
                     try {
                         chatServer.broadcastMessage(name + " : " + message);
