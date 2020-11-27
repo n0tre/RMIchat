@@ -64,8 +64,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
                         System.out.println("List of active users: " + chatServer.listOfActiveUsers(this));
                     } catch (RemoteException e) {
                         e.printStackTrace();
-                    }
-                    ;
+                    };
                 }
                 if (choose.equals("4")) {
                     try {
