@@ -35,7 +35,6 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
                 System.out.println(name + " choose what you want " + Arrays.asList(Actions.values()));
             while (true) {
             choose = scanner.nextLine();
