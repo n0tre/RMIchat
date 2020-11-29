@@ -39,13 +39,15 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
             while (true) {
             choose = scanner.nextLine();
             if (choose.equals("1")) {
-                    System.out.println("Ok, " + name + ", enter the chat number");
+                    System.out.println("Ok, " + name + ", enter the recipient's name");
                     String destination = scanner.nextLine();
-                    int chatNumber = Integer.parseInt(destination);
                     System.out.println(name + ", enter your private message");
                     message = scanner.nextLine();
                     try {
-                        chatServer.privateMessage(name + " : " + message, chatNumber);
+                        if (chatServer.indexOf(destination) == -1)
+                            System.out.println("Client is offline");
+                        else
+                        chatServer.privateMessage(name + " : " + message, destination);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
