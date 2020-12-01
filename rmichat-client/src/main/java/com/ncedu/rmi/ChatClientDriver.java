@@ -1,5 +1,6 @@
 package com.ncedu.rmi;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -12,8 +13,9 @@ public class ChatClientDriver {
         ChatServerIF chatServer = null;
         try {
             chatServer = (ChatServerIF) Naming.lookup(chatServerURL);
-        } catch (NotBoundException | MalformedURLException e) {
+        } catch (NotBoundException | MalformedURLException  | NullPointerException e) {
             e.printStackTrace();
+            System.out.println("Exception!");
         }
         Scanner s = new Scanner(System.in);
         System.out.println("Enter your name and press Enter: ");
