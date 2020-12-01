@@ -1,11 +1,13 @@
 package com.ncedu.rmi;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
 import java.util.Scanner;
+
 public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Runnable {
     private static final long serialVersionUID = 1L;
-    private ChatServerIF chatServer;
+    private final ChatServerIF chatServer;
     private String name = null;
 
     protected ChatClient(ChatServerIF chatServer, String name) throws RemoteException {
@@ -13,9 +15,11 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
         this.chatServer = chatServer;
         chatServer.registerChatClient(this, this.name);
     }
+
     public void retrieveMessage(String message) throws RemoteException {
         System.out.println(message);
     }
+
     @Override
     public void run() {
         Scanner scanner = new Scanner(System.in);
@@ -47,34 +51,33 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
                         e.printStackTrace();
                     }
                 }
-                    if (choose.equals("2")) {
-                        System.out.println("Ok, " + name + ", enter your public message");
-                        message = scanner.nextLine();
-                        try {
-                            chatServer.broadcastMessage(name + " : " + message);
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
+                if (choose.equals("2")) {
+                    System.out.println("Ok, " + name + ", enter your public message");
+                    message = scanner.nextLine();
+                    try {
+                        chatServer.broadcastMessage(name + " : " + message);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
                     }
-                    if (choose.equals("3")) {
-                        try {
-                            System.out.println("List of active users: " + chatServer.listOfActiveUsers(chatServer));
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                        ;
+                }
+                if (choose.equals("3")) {
+                    try {
+                        System.out.println("List of active users: " + chatServer.listOfActiveUsers(chatServer));
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
                     }
-                    if (choose.equals("4")) {
-                        try {
-                            chatServer.disconnectChatClient(this);
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
+                }
+                if (choose.equals("4")) {
+                    try {
+                        chatServer.disconnectChatClient(this);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
                     }
                 }
             }
         }
     }
+}
 
 
 
