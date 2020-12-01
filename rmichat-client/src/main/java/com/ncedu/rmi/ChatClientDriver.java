@@ -13,18 +13,22 @@ public class ChatClientDriver {
         ChatServerIF chatServer = null;
         try {
             chatServer = (ChatServerIF) Naming.lookup(chatServerURL);
-        } catch (NotBoundException | MalformedURLException  | NullPointerException e) {
+        } catch (NotBoundException | MalformedURLException e) {
             e.printStackTrace();
             System.out.println("Exception!");
         }
         Scanner s = new Scanner(System.in);
         System.out.println("Enter your name and press Enter: ");
         String name = s.nextLine().trim();
-        while (!(chatServer.isUnique(chatServer, name))) {
-            System.out.println("Nickname already used. Please choose another one: ");
-            name = s.nextLine().trim();
+        if (chatServer != null) {
+            while (!(chatServer.isUnique(chatServer, name))) {
+                System.out.println("Nickname already used. Please choose another one: ");
+                name = s.nextLine().trim();
+            }
         }
-        new Thread(new ChatClient(chatServer, name)).start();
+        if (chatServer != null) {
+            new Thread(new ChatClient(chatServer, name)).start();
+        }
     }
 }
 
