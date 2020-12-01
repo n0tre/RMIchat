@@ -11,11 +11,11 @@ public class ChatClientDriver {
             Scanner s = new Scanner(System.in);
             System.out.println("Enter your name and press Enter: ");
             String name = s.nextLine().trim();
-            while (!chatServer.isUnique(name, chatServer)) {
+           while (!(chatServer.isUnique(chatServer, name))) {
                 System.out.println("Nickname already used. Please choose another one: ");
                 name = s.nextLine().trim();
             }
-            new Thread(new ChatClient(name, chatServer)).start();
+            new Thread(new ChatClient(chatServer, name)).start();
     }
 }
 
