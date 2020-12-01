@@ -7,9 +7,14 @@ import java.rmi.RemoteException;
 import java.util.Scanner;
 
 public class ChatClientDriver {
-    public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException {
+    public static void main(String[] args) throws RemoteException {
         String chatServerURL = "rmi://localhost/RMIchatServer";
-        ChatServerIF chatServer = (ChatServerIF) Naming.lookup(chatServerURL);
+        ChatServerIF chatServer = null;
+        try {
+            chatServer = (ChatServerIF) Naming.lookup(chatServerURL);
+        } catch (NotBoundException | MalformedURLException e) {
+            e.printStackTrace();
+        }
         Scanner s = new Scanner(System.in);
         System.out.println("Enter your name and press Enter: ");
         String name = s.nextLine().trim();
