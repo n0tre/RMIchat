@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Runnable {
     private static final long serialVersionUID = 1L;
+    private static final String CHAT_SERVER_URL = "rmi://localhost/RMIchatServer";
     private final ChatServerIF chatServer;
     private String name = null;
 
@@ -30,6 +31,10 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
                 choose = scanner.nextLine();
                 switch (choose) {
                     case "1": {
+                        System.out.println("You are already connected and can start chatting");
+                        break;
+                    }
+                    case "2": {
                         System.out.println("Ok, " + name + ", enter the recipient's name");
                         String destination = scanner.nextLine();
                         System.out.println(name + ", enter your private message");
@@ -43,7 +48,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
                     }
 
 
-                    case "2": {
+                    case "3": {
                         System.out.println("Ok, " + name + ", enter your public message");
                         message = scanner.nextLine();
                         try {
@@ -53,7 +58,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
                         }
                         break;
                     }
-                    case "3": {
+                    case "4": {
                         try {
                             System.out.println("List of active users: " + chatServer.listOfActiveUsers(chatServer));
                         } catch (RemoteException e) {
@@ -61,7 +66,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
                         }
                         break;
                     }
-                    case "4": {
+                    case "5": {
                         try {
                             chatServer.disconnectChatClient(this);
                         } catch (RemoteException e) {
@@ -70,7 +75,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
                         break;
                     }
                     default: {
-                        System.out.println(Actions.HELP);
+                        System.out.println(Actions.HELP(name));
 
                         break;
                     }

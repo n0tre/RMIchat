@@ -1,51 +1,70 @@
 package com.ncedu.rmi;
 
 import java.net.MalformedURLException;
-import java.rmi.AlreadyBoundException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
+import java.rmi.*;
 import java.util.Scanner;
 
 import static java.rmi.Naming.bind;
 
 public class ChatClientDriver {
-
-
-    public static void main(String[] args) throws RemoteException, MalformedURLException {
-        String chatServerURL = "rmi://localhost/RMIchatServer";
+    private static final String CHAT_SERVER_URL = "rmi://localhost/RMIchatServer";
+    public static void main(String[] args) throws RemoteException {
 
         ChatServerIF chatServer = null;
-        try {
-            chatServer = (ChatServerIF) Naming.lookup(chatServerURL);
-        } catch (NotBoundException | MalformedURLException e) {
-            e.printStackTrace();
-            System.out.println("Failed to connect to server");
-        }
         Scanner s = new Scanner(System.in);
+        Thread thread = null;
+        String choose;
+
         System.out.println("Enter your name and press Enter: ");
         String name = s.nextLine().trim();
-
-
-        Thread thread = new Thread();
-        while (!thread.isAlive()) {
-            try {
-                {
-                    if (chatServer != null) {
-                        bind(name.toUpperCase(), chatServer);
-                        thread = new Thread(new ChatClient(chatServer, name));
-                        thread.start();
+        try {
+            chatServer = (ChatServerIF) Naming.lookup(CHAT_SERVER_URL);
+            while (thread == null) {
+                try {
+                    {
+                        if (chatServer != null) {
+                            bind(name.toUpperCase(), chatServer);
+                            thread = new Thread(new ChatClient(chatServer, name));
+                            thread.start();
+                        }
                     }
+                } catch (AlreadyBoundException | MalformedURLException exception) {
+                    System.out.println("Nickname is already used! Choose another nickname, please:");
+                    name = s.nextLine().trim();
                 }
-            } catch (AlreadyBoundException | MalformedURLException e) {
+            }
 
-                System.out.println("Nickname is already used! Choose another nickname, please:");
-                name = s.nextLine().trim();
+        } catch (NotBoundException | MalformedURLException | ConnectException e) {
+            System.out.println("Failed to connect to server. Server is not available, try later");
+            System.out.println(Actions.CONNECT);
+            choose = s.nextLine().trim();
+            while (choose.equals("1")) {
+                try {
+                    chatServer = (ChatServerIF) Naming.lookup(CHAT_SERVER_URL);
+                    while (thread == null) {
+                        try {
+                            {
+                                if (chatServer != null) {
+                                    bind(name.toUpperCase(), chatServer);
+                                    thread = new Thread(new ChatClient(chatServer, name));
+                                    thread.start();
+                                }
+                            }
+                        } catch (AlreadyBoundException | MalformedURLException exception) {
+
+                            System.out.println("Nickname is already used! Choose another nickname, please:");
+                            name = s.nextLine().trim();
+                        }
+                    }
+                    break;
+                } catch (NotBoundException | MalformedURLException | ConnectException ex) {
+                    System.out.println("Failed to connect to server, try later");
+                    System.out.println(Actions.CONNECT);
+                }
+                choose = s.nextLine().trim();
             }
         }
-
     }
-
 }
 
 
