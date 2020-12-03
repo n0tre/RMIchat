@@ -2,7 +2,6 @@ package com.ncedu.rmi;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.List;
 import java.util.Map;
 
 public interface ChatServerIF extends Remote {
@@ -14,7 +13,7 @@ public interface ChatServerIF extends Remote {
 
     void privateMessage(String message, String name) throws RemoteException;
 
-    List<String> listOfActiveUsers(ChatServerIF chatClient) throws RemoteException;
+    Object listOfActiveUsers(ChatServerIF chatClient) throws RemoteException;
 
     boolean isUnique(ChatServerIF list, String name) throws RemoteException;
 

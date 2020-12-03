@@ -2,8 +2,7 @@ package com.ncedu.rmi;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,26 +12,20 @@ import java.util.concurrent.Executors;
 public class ChatServer extends UnicastRemoteObject implements ChatServerIF {
     private static final long serialVersionUID = 1L;
     private final Map<ChatClientIF, String> chatClients;
-    private final int numOfCores = Runtime.getRuntime().availableProcessors();
-    ExecutorService executorService = Executors.newFixedThreadPool(numOfCores * 8);
+    private final ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 8);
 
     public ChatServer() throws RemoteException {
         chatClients = new ConcurrentHashMap<>();
     }
 
-    public List<String> listOfActiveUsers(ChatServerIF chatClient) throws RemoteException {
-        List<String> list = new ArrayList<>();
-        for (Map.Entry<ChatClientIF, String> chatClientIFStringEntry : chatClients.entrySet()) {
-            list.add(chatClientIFStringEntry.getValue());
-        }
-        return list;
+    public Collection<String> listOfActiveUsers(ChatServerIF chatClient) throws RemoteException {
+        return chatClients.values();
     }
 
     public boolean isUnique(ChatServerIF list, String name) throws RemoteException {
         boolean unique = true;
-
-        for (int i = 0; i < listOfActiveUsers(list).size(); i++) {
-            if (listOfActiveUsers(list).get(i).toUpperCase().equals(name.toUpperCase()))
+        for (ChatClientIF chatClientIF : chatClients.keySet()) {
+            if (chatClients.get(chatClientIF).equals(name))
                 unique = false;
         }
         return unique;
@@ -61,10 +54,9 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerIF {
     }
 
     public ChatClientIF getKeyByValue(Map<ChatClientIF, String> map, String value) {
-        for (Map.Entry<ChatClientIF, String> entry : map.entrySet()) {
-            if (Objects.equals(value, entry.getValue())) {
-                return entry.getKey();
-            }
+        for (ChatClientIF chatClientIF : chatClients.keySet()) {
+            if (chatClients.get(chatClientIF).equals(value))
+                return chatClientIF;
         }
         return null;
     }

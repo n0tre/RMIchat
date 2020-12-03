@@ -1,6 +1,16 @@
 package com.ncedu.rmi;
 
 public enum Actions {
+    HELP {
+        @Override
+        public String toString() {
+            return "\n" + "\n" + SEND_PRIVATE_MESSAGE + "\n" +
+                    SEND_PUBLIC_MESSAGE + "\n" +
+                    GET_LIST_OF_ACTIVE_USERS + "\n" +
+                    DISCONNECT + "\n";
+
+        }
+    },
     SEND_PRIVATE_MESSAGE {
         @Override
         public String toString() {

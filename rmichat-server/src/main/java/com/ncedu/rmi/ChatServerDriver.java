@@ -7,8 +7,12 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class ChatServerDriver {
-    public static void main(String[] args) throws RemoteException, MalformedURLException, AlreadyBoundException {
+    public static void main(String[] args) throws RemoteException, MalformedURLException {
         Registry registry = LocateRegistry.createRegistry(1099);
-        registry.bind("RMIchatServer", new ChatServer());
+        try {
+            registry.bind("RMIchatServer", new ChatServer());
+        } catch (AlreadyBoundException e) {
+            System.out.println("Nickname is already USED!");
+        }
     }
 }
