@@ -56,6 +56,7 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerIF {
     public ChatClientIF getKeyByValue(Map<ChatClientIF, String> map, String value) {
         for (ChatClientIF chatClientIF : chatClients.keySet()) {
             if (chatClients.get(chatClientIF).hashCode() == (value.hashCode()))
+                if (chatClients.get(chatClientIF).equals(value))
                 return chatClientIF;
         }
         return null;
