@@ -26,7 +26,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
         String choose;
         String message;
         {
-            System.out.println(name + ", choose what you want: " + Actions.HELP);
+            System.out.println(name + ", choose what you want: " + Actions.HELP.getHelp());
             while (true) {
                 choose = scanner.nextLine();
                 switch (choose) {
@@ -46,8 +46,6 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
                         }
                         break;
                     }
-
-
                     case "3": {
                         System.out.println("Ok, " + name + ", enter your public message");
                         message = scanner.nextLine();
@@ -75,7 +73,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
                         break;
                     }
                     default: {
-                        System.out.println(Actions.HELP(name));
+                        System.out.println(Actions.HELP.getHelp());
 
                         break;
                     }

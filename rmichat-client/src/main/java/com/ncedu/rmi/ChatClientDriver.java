@@ -8,24 +8,25 @@ import static java.rmi.Naming.bind;
 
 public class ChatClientDriver {
     private static final String CHAT_SERVER_URL = "rmi://localhost/RMIchatServer";
+
     public static void main(String[] args) throws RemoteException {
 
         ChatServerIF chatServer = null;
         Scanner s = new Scanner(System.in);
-        Thread thread = null;
+        ChatClient client = null;
         String choose;
 
         System.out.println("Enter your name and press Enter: ");
         String name = s.nextLine().trim();
         try {
             chatServer = (ChatServerIF) Naming.lookup(CHAT_SERVER_URL);
-            while (thread == null) {
+            while (client == null) {
                 try {
                     {
                         if (chatServer != null) {
                             bind(name.toUpperCase(), chatServer);
-                            thread = new Thread(new ChatClient(chatServer, name));
-                            thread.start();
+                            client = new ChatClient(chatServer, name);
+                            client.run();
                         }
                     }
                 } catch (AlreadyBoundException | MalformedURLException exception) {
@@ -41,13 +42,13 @@ public class ChatClientDriver {
             while (choose.equals("1")) {
                 try {
                     chatServer = (ChatServerIF) Naming.lookup(CHAT_SERVER_URL);
-                    while (thread == null) {
+                    while (client == null) {
                         try {
                             {
                                 if (chatServer != null) {
                                     bind(name.toUpperCase(), chatServer);
-                                    thread = new Thread(new ChatClient(chatServer, name));
-                                    thread.start();
+                                    client = new ChatClient(chatServer, name);
+                                    client.run();
                                 }
                             }
                         } catch (AlreadyBoundException | MalformedURLException exception) {
@@ -65,6 +66,8 @@ public class ChatClientDriver {
             }
         }
     }
+
+
 }
 
 
