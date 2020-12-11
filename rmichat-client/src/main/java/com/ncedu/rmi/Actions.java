@@ -9,7 +9,7 @@ public enum Actions {
     GET_LIST_OF_ACTIVE_USERS("4.Get list of active users"),
     DISCONNECT("5.Disconnect");
 
-    String description;
+    private final String description;
 
     Actions(String description) {
         this.description = description;

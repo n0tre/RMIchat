@@ -2,12 +2,11 @@ package com.ncedu.rmi;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.Map;
 
 public interface ChatServerIF extends Remote {
-    void registerChatClient(ChatClientIF chatClient, String name) throws RemoteException;
+    void registerChatClient(String name, ChatClientIF chatClient) throws RemoteException;
 
-    void disconnectChatClient(ChatClientIF chatClient) throws RemoteException;
+    void disconnectChatClient(String name) throws RemoteException;
 
     void broadcastMessage(String message) throws RemoteException;
 
@@ -15,10 +14,11 @@ public interface ChatServerIF extends Remote {
 
     Object listOfActiveUsers(ChatServerIF chatClient) throws RemoteException;
 
-    boolean isUnique(ChatServerIF list, String name) throws RemoteException;
+    // boolean isUnique(ChatServerIF list, String name) throws RemoteException;
 
-    ChatClientIF getKeyByValue(Map<ChatClientIF, String> map, String value) throws RemoteException;
+    // ChatClientIF getKeyByValue(Map<ChatClientIF, String> map, String value) throws RemoteException;
 
-    boolean isOnline(ChatServerIF chatServer, String name) throws RemoteException;
+    // boolean isOnline(ChatServerIF chatServer, String name) throws RemoteException;
+
 
 }

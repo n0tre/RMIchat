@@ -13,7 +13,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
     protected ChatClient(ChatServerIF chatServer, String name) throws RemoteException {
         this.name = name;
         this.chatServer = chatServer;
-        chatServer.registerChatClient(this, this.name);
+        chatServer.registerChatClient(this.name, this);
     }
 
     public void retrieveMessage(String message) throws RemoteException {
@@ -42,8 +42,10 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
                         try {
                             chatServer.privateMessage(name + " : " + message, destination);
                         } catch (RemoteException e) {
-                            System.out.println("User is offline");
+                            e.printStackTrace();
+                            System.out.println("User already disconnected");
                         }
+
                         break;
                     }
                     case "3": {
@@ -66,7 +68,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
                     }
                     case "5": {
                         try {
-                            chatServer.disconnectChatClient(this);
+                            chatServer.disconnectChatClient(name);
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
