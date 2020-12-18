@@ -74,9 +74,15 @@ public class ChatServer extends UnicastRemoteObject implements ChatServerIF {
         executorService.execute(() -> {
             try {
                 if (chatClients.get(name) != null) {
-                    chatClients.get(name).retrieveMessage(message);
+                    Thread.sleep(60000);
+                    try {
+                        chatClients.get(name).retrieveMessage(message);
+                    } catch (NullPointerException npe) {
+                        System.out.println("User doesn't want communicate with you");
+                    }
+
                 } else System.out.println("User is offline");
-            } catch (RemoteException e) {
+            } catch (RemoteException | InterruptedException e) {
                 e.printStackTrace();
                 try {
                     disconnectChatClient(name);

@@ -41,7 +41,7 @@ public class ChatClient extends UnicastRemoteObject implements ChatClientIF, Run
                         message = scanner.nextLine();
                         try {
                             chatServer.privateMessage(name + " : " + message, destination);
-                        } catch (RemoteException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                             System.out.println("User already disconnected");
                         }
